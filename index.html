@@ -15,7 +15,7 @@
         html,
         body {
             width: 100%;
-            height: 100%;
+            height: 1000px;
         }
 
         .box,
@@ -51,24 +51,25 @@
         var y = cas.offset().top
         var ctx = cas[0].getContext('2d')
         ctx.lineWidth = 5
+        var y1 = 0
         ctx.strokeStyle = '#daa520'
         cas.on('touchstart', function (e) {
             var startX = e.originalEvent.targetTouches[0].clientX - x
-            var startY = e.originalEvent.targetTouches[0].clientY - y
+            var startY = e.originalEvent.targetTouches[0].clientY - y + y1
             ctx.beginPath()
             ctx.moveTo(startX, startY)
             $('.btn').prop('disabled', false)
         })
         cas.on('touchmove', function (e) {
             var moveX = e.originalEvent.targetTouches[0].clientX - x
-            var moveY = e.originalEvent.targetTouches[0].clientY - y
+            var moveY = e.originalEvent.targetTouches[0].clientY - y + y1
             ctx.lineTo(moveX, moveY)
             ctx.stroke()
             ctx.moveTo(moveX, moveY)
         })
         cas.on('touchend', function (e) {
             ctx.closePath()
-            console.log('绘制完成');
+            // console.log('绘制完成');
         })
 
         $('.btn').on('click', function () {
@@ -80,7 +81,7 @@
         })
 
         $(window).on('scroll', function () {
-            y -= $(this).scrollTop()
+            y1 = $(this).scrollTop()
         })
     </script>
 
