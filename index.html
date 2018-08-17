@@ -38,7 +38,7 @@
 <body>
     <div class="box">
         <canvas id="canvas" width="375" height="466"></canvas>
-        <button class="btn">生成图片</button>
+        <button class="btn" disabled>生成图片</button>
     </div>
 
     <div class="img">
@@ -57,7 +57,7 @@
             var startY = e.originalEvent.targetTouches[0].clientY - y
             ctx.beginPath()
             ctx.moveTo(startX, startY)
-
+            $('.btn').prop('disabled', false)
         })
         cas.on('touchmove', function (e) {
             var moveX = e.originalEvent.targetTouches[0].clientX - x
@@ -76,6 +76,7 @@
             img.src = cas[0].toDataURL("image/png")
             ctx.clearRect(0, 0, cas.width(), cas.height())
             $('.img img').attr('src', img.src)
+            $('.btn').prop('disabled', true)
         })
     </script>
 
