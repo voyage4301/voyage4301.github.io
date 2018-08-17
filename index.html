@@ -54,14 +54,14 @@
         ctx.strokeStyle = '#daa520'
         cas.on('touchstart', function (e) {
             var startX = e.originalEvent.targetTouches[0].clientX - x
-            var startY = e.originalEvent.targetTouches[0].clientY - y + cas.scrollTop()
+            var startY = e.originalEvent.targetTouches[0].clientY - y
             ctx.beginPath()
             ctx.moveTo(startX, startY)
             $('.btn').prop('disabled', false)
         })
         cas.on('touchmove', function (e) {
             var moveX = e.originalEvent.targetTouches[0].clientX - x
-            var moveY = e.originalEvent.targetTouches[0].clientY - y + cas.scrollTop()
+            var moveY = e.originalEvent.targetTouches[0].clientY - y
             ctx.lineTo(moveX, moveY)
             ctx.stroke()
             ctx.moveTo(moveX, moveY)
@@ -77,6 +77,10 @@
             ctx.clearRect(0, 0, cas.width(), cas.height())
             $('.img img').attr('src', img.src)
             $('.btn').prop('disabled', true)
+        })
+
+        $(window).on('scroll', function () {
+            y -= $(this).scrollTop()
         })
     </script>
 
