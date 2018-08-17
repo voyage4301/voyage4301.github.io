@@ -54,14 +54,14 @@
         ctx.strokeStyle = '#daa520'
         cas.on('touchstart', function (e) {
             var startX = e.originalEvent.targetTouches[0].clientX - x
-            var startY = e.originalEvent.targetTouches[0].clientY - y
+            var startY = e.originalEvent.targetTouches[0].clientY - y - cas.scrollTop()
             ctx.beginPath()
             ctx.moveTo(startX, startY)
             $('.btn').prop('disabled', false)
         })
         cas.on('touchmove', function (e) {
             var moveX = e.originalEvent.targetTouches[0].clientX - x
-            var moveY = e.originalEvent.targetTouches[0].clientY - y
+            var moveY = e.originalEvent.targetTouches[0].clientY - y - cas.scrollTop()
             ctx.lineTo(moveX, moveY)
             ctx.stroke()
             ctx.moveTo(moveX, moveY)
