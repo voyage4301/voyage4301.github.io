@@ -6,7 +6,6 @@
 
     let mainBtn = document.querySelector('.main-btn')
     let deskTop = mainBtn.parentNode
-    console.log(deskTop);
 
     // 桌布属性
     let d_width = deskTop.offsetWidth,
