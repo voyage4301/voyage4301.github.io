@@ -61,5 +61,4 @@
         el.style.left = x + 'px'
         el.style.top = y + 'px'
     }
-
 })()
