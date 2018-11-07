@@ -1,17 +1,479 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>hello World</title>
-    <link rel="stylesheet" href="./touch-move.css">
+    <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <title>Hello World</title>
 </head>
-<body>
-    <div class="touch-move">
-        <div class="main-btn"></div>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+
+
+<script>
+
+
+    var u = window.navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+
+    Utils.init('com.ios.cdsample');
+
+    function goback() {
+        cordova.exec(null, null, "CDVEMPBridge", "goBack", ["kkkkk"]);
+    }
+    function _goToMainAppClearUserInfo() {
+        Utils.goToMainApp();
+    }
+    function _goToMainApp() {
+        Utils.goToMainApp(false);
+    }
+    function refresh() {
+        window.location.href = "/cordova/index.html"
+    }
+    function testClipboard() {
+        Utils.copyToClipboard("我是cordova111", function () {
+            Utils.getClipboardContent(function (content) {
+                alert(content);
+            });
+        });
+    }
+    function _testRooted() {
+        Utils.isRooted(function (result) {
+            alert(result)
+        });
+    }
+    function _testTel() {
+        Utils.tel('13112341234');
+    }
+    function _testSendMessage() {
+        Utils.sendMessage('13112341234', 'hhhhhhhh');
+    }
+    function _testZipImage() {
+        var path = Utils.userRootPath + "test.png";
+        var toPath = Utils.userRootPath + "test1.png";
+        Utils.zipImage(path, "100", toPath, function (res) {
+            alert(res)
+        })
+    }
+    function _testImageBase64() {
+        var path = Utils.userRootPath + "test1.png";
+        //var path = "/sdcard/123.jpg";
+        Utils.imageToBase64(path, function (result) {
+            alert(result);
+        }, function (error) {
+            alert(error)
+        })
+    }
+    function _testZipfile() {
+        var rootPath = Utils.userRootPath;
+        var finalPath = rootPath + "test1.zip";
+        var arr = [];
+        arr.push(rootPath + "test.png");
+        arr.push(rootPath + "test1.png");
+        Utils.zipFile(finalPath, arr, function (result) {
+            alert(result);
+        });
+    }
+    function _testUnzipfile() {
+        var finalPath = Utils.userRootPath + "test1";
+        var sourceFile = Utils.userRootPath + "test1.zip";
+        Utils.unzipFile(sourceFile, finalPath, function (result) {
+            alert(result);
+        });
+    }
+    function testSelectPhoto() {
+        navigator.camera.getPicture(function (data) {
+            alert(data);
+        }, function (err) {
+            alert(err)
+        }, {
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                popoverOptions: new CameraPopoverOptions(300, 300, 100, 100, Camera.PopoverArrowDirection.ARROW_ANY)
+            });
+    }
+    function testMulSelectPhoto() {
+        plugins.imagePicker.getPictures(
+            function (results) {
+                for (var i = 0; i < results.length; i++) {
+                    console.log('Image URI: ' + results[i]);
+                }
+            }, function (error) {
+                console.log('Error: ' + error);
+            }
+        );
+    }
+    function _testStatusBar() {
+        StatusBar.overlaysWebView(true);
+        StatusBar.styleBlackTranslucent();
+    }
+
+    function hidenav() {
+        Utils.hideNav();
+    }
+
+    function shownav() {
+        Utils.showNav();
+    }
+
+    function hideMenu() {
+        Utils.hideMenu();
+    }
+
+    function showMenu() {
+        Utils.showMenu();
+    }
+
+    function setPageNum() {
+        Utils.setNavPageNum(4);
+    }
+
+    function getUserInfo() {
+        Utils.getUserInfo(function (res) {
+            alert(res);
+        });
+    }
+    function getSSOToken() {
+        Utils.getSSOToken(function (res) {
+            alert(res);
+        });
+    }
+    function isLogin() {
+        Utils.isLogin(function (res) {
+            alert(res)
+        });
+    };
+    function logout() {
+        Utils.logout();
+    }
+
+    function _testShare2WX() {
+        var params = {
+            'shareTo': 'Wechat',
+            'shareType': 'image',
+            'imageUrl': '/img/logo.png',
+            'title': '这是title',
+            'text': '这是内容11111',
+            'url': 'http://www.baidu.com'
+        };
+        ShareSDK.shareToWechat(params, function (res) {
+            alert(res + "----")
+        });
+    }
+    function _testOneKeyShare() {
+        var params = {
+            'shareType': 'image',
+            'imageUrl': 'http://img.zcool.cn/community/01f09e577b85450000012e7e182cf0.jpg@1280w_1l_2o_100sh.jpg',
+            'title': '这是title',
+            'text': '这是内容',
+            'url': 'http://www.baidu.com'
+        }
+        ShareSDK.oneKeyShare(params, function (result) {
+            alert(result);
+        })
+    }
+
+    function uctest() {
+        cordova.exec(function (msg) {
+            alert(msg)
+        }, function (error) {
+            //                 登录失败
+            alert("error:" + error);
+        }, "ucStart", "loginUC", ["jjccb16", "www.qqtech.com", "5200", "c0d55b67115300161b87", "310000"]);
+    }
+    function getVersion() {
+        Utils.getClientConfig(function (config) {
+            var con = JSON.parse(config);
+            alert(con.clientVersion + "." + con.buildVersion);
+        });
+    }
+    function testVerifySecurityToken() {
+        Utils.verifySecurityToken(function (result) {
+            alert('verity:' + result);
+        });
+    }
+
+    function testGetSecurityToken() {
+        Utils.getSecurityToken(function (result) {
+            alert('token:' + result);
+        });
+    }
+    function testSecurityLogin() {
+        Utils.securityLogin(function (result) {
+            alert('token:' + result);
+        }, function (result) {
+            alert('failure:' + result);
+        })
+    }
+    function openBrowser() {
+        Utils.browser('http://www.baidu.com');
+    }
+
+    function setGlobalValue() {
+        Utils.setGlobalValue('cd_key', 'im cd value');
+    }
+    function getGlobalValue() {
+        Utils.getGlobalValue('cd_key', false, res => {
+            alert(res);
+        });
+    }
+    function getGlobalValueDelete() {
+        Utils.getGlobalValue('cd_key', true, res => {
+            alert(res);
+        });
+    }
+    function sendRnEvent() {
+        Utils.sendRnEvent("SXSX_EVENT", "77777777777", res => {
+            alert(res)
+        });
+    }
+    function goToRnPage() {
+        var params = {
+            'appId': "com.cpic.app.bxx",
+            'pageUrl': ''
+        }
+        Utils.goToRnPage("com.taibao.shouxian", "/login.js", params);
+    }
+    function onBodyLoad() {
+        // alert('3333')
+        Utils.receiveCordovaEvent("textEvent", function (result) {
+            alert("收到");
+        });
+    }
+
+    function closeWebview() {
+        Utils.closeWebview();
+    }
+
+    function _openTEP() {
+        var url = "https://tep-sittest.cpic.com.cn/tep/html/Customer_pages/Customer_home.html?mobile=18811112212&ffName=%E6%B7%B1%20%E5%9C%B3%E5%8D%81%E4%BA%8C&userId=f1530d9e98330c9ed643ece63e56251b&sessionToken=25e0882e05d4199802d08a969a5d5444&unitCode=00000000000023";
+        Utils.openTEP({
+            url: url,
+            title: "太e赔",
+            showBack: true,
+        }, res => { }, res => {
+            alert(res);
+        });
+    }
+
+    function _regist() {
+        var params = {
+            url: "http://172.16.84.55:8080/com.ios.cdsample"
+        }
+        Utils.zxRegist(params);
+    }
+
+    function _openHdCall() {
+        var params = {
+            'aaa': '3333'
+        }
+        Utils.openHdCall(params, res => {
+            console.log(res + "===77777777777")
+            alert(JSON.stringify(res))
+        });
+    }
+
+    function _openOther() {
+        var params = {
+            appName: 'bxx',
+        }
+        Utils.openOtherApp(params);
+    }
+
+    function _setSecurityPwd() {
+        var params = "设置"
+        Utils.setSecurityPwd(params, res => {
+            console.log(res + "===999999")
+            alert(JSON.stringify(res))
+        });
+    }
+    function _updateSecurityPwd() {
+        var params = "修改"
+        Utils.updateSecurityPwd(params, res => {
+            console.log(res + "===999999")
+            alert(JSON.stringify(res))
+        });
+    }
+    function _isSecurityPwdEnable() {
+        var params = "判断有无手势密码"
+        Utils.isSecurityPwdEnable(params, res => {
+            console.log(res + "===999999")
+            alert(JSON.stringify(res))
+        });
+    }
+
+    function _setSecurityPwd() {
+        var params = "设置"
+        Utils.setSecurityPwd(params, res => {
+            console.log(res + "===999999")
+            alert(JSON.stringify(res))
+        });
+    }
+    function _updateSecurityPwd() {
+        var params = "修改"
+        Utils.updateSecurityPwd(params, res => {
+            console.log(res + "===999999")
+            alert(JSON.stringify(res))
+        });
+    }
+    function _isSecurityPwdEnable() {
+        var params = "判断有无手势密码"
+        Utils.isSecurityPwdEnable(params, res => {
+            console.log(res + "===999999")
+            alert(JSON.stringify(res))
+        });
+    }
+    function _closeSecurityPwd() {
+        var params = "关闭安全密码"
+        Utils.closeSecurityPwd(params, res => {
+            console.log(res + "===999999")
+            alert(JSON.stringify(res))
+        });
+    }
+
+</script>
+
+<body onLoad="onBodyLoad()">
+    <div class="app">
+
+        <div style="overflow:scroll">
+            <input type="button" value="打开保险箱app" onclick="_openOther()" style="height: 40px" />
+            <br>
+            <input type="button" value="前往视频通话" onclick="_openHdCall()" style="height: 40px" />
+            <br>
+            <input type="button" value="前往注册" onclick="_regist()" style="height: 40px" />
+            <br>
+            <input type="button" value="打开太e赔" onclick="_openTEP()" style="height: 40px" />
+            <br>
+            <input type="button" value="closeWebview" onclick="closeWebview()" style="height: 80px" />
+            <br>
+            <input type="button" value="goToRnPage" onclick="goToRnPage()" style="height: 80px" />
+            <br>
+            <input type="button" value="setGlobalValue" onclick="setGlobalValue()" style="height: 40px" />
+            <br>
+            <input type="button" value="getGlobalValue" onclick="getGlobalValue()" style="height: 40px" />
+            <br>
+            <input type="button" value="getGlobalValue并删除" onclick="getGlobalValueDelete()" style="height: 40px" />
+            <br>
+            <input type="button" value="发送rn通知" onclick="sendRnEvent()" style="height: 40px" />
+            <br>
+
+            <input type="button" value="测试系统浏览器打开" onclick="openBrowser()" style="height: 40px" />
+            <br>
+            <input type="button" value="测试nav隐藏" onclick="hidenav()" style="height: 40px" />
+            <br>
+            <input type="button" value="测试nav显示" onclick="shownav()" style="height: 40px" />
+            <br>
+            <input type="button" value="测试memu展开" onclick="showMenu()" style="height: 40px" />
+            <br>
+            <input type="button" value="测试memu收起" onclick="hideMenu()" style="height: 40px" />
+            <br>
+            <input type="button" value="测试memu指定页" onclick="setPageNum()" style="height: 40px" />
+            <br>
+            <input type="button" onclick="testSecurityLogin()" value="测试二次登录" />
+            <br>
+            <input type="button" onclick="testGetSecurityToken()" value="测试获取二次登录token" />
+            <br>
+            <input type="button" onclick="testVerifySecurityToken()" value="校验二次登录token" />
+            <br>
+            <input type="button" onclick="refresh()" value="点击刷新111112" />
+            <br>
+            <input type="button" onclick="testSelectPhoto()" value="测试相册" />
+            <br>
+            <input type="button" onclick="testMulSelectPhoto()" value="测试多选" />
+            <br>
+            <input type="button" onclick="_testStatusBar()" value="测试statusbar" />
+            <br>
+            <input type="button" onclick="testClipboard()" value="测试剪切板" />
+            <br>
+            <input type="button" onclick="_testZipfile()" value="测试压缩" />
+            <br>
+            <input type="button" onclick="_testUnzipfile()" value="测试解压" />
+            <br>
+            <input type="button" onclick="_testImageBase64()" value="测试获取图片base64" />
+            <br>
+            <input type="button" onclick="_testZipImage()" value="测试压缩图片" />
+            <br>
+            <input type="button" onclick="_testSendMessage()" value="测试发短信" />
+            <br>
+            <input type="button" onclick="_testTel()" value="测试打电话" />
+            <br>
+            <input type="button" onclick="_testRooted()" value="测试是否越狱" />
+            <br>
+            <input type="button" onclick="_testShare2WX()" value="测试sharesdk分享微信2222" />
+            <br>
+            <input type="button" onclick="_testOneKeyShare()" value="测试sharesdk一键分享" />
+            <br>
+            <input type="button" onclick="getUserInfo()" value="获取用户信息" />
+            <br>
+            <input type="button" onclick="getSSOToken()" value="获取token" />
+            <br>
+            <input type="button" onclick="isLogin()" value="是否登录" />
+            <br>
+            <input type="button" onclick="logout()" value="登出" />
+            <br>
+            <input type="button" onclick="uctest()" value="uc测试" />
+            <br>
+            <input type="button" onclick="getVersion()" value="测试获取版本信息" />
+            <br>
+            <input type="button" onclick="_goToMainAppClearUserInfo()" value="前往首页并登出" />
+            <br>
+            <input type="button" onclick="_goToMainApp()" value="前往首页不登出" />
+            <br>
+            <input type="button" onclick="_setSecurityPwd()" value="设置手势密码测试" />
+            <br>
+            <input type="button" onclick="_updateSecurityPwd()" value="修改手势密码测试" />
+            <br>
+            <input type="button" onclick="_isSecurityPwdEnable()" value="判断有无设置手势密码" />
+            <br>
+            <input type="button" onclick="_closeSecurityPwd()" value="关闭安全密码" />
+            <br>
+            <input type="button" onclick="goback()" value="点击返回" />
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+        <!--<h1>Apache Cordova</h1>-->
+        <!--<div id="deviceready" class="blink">-->
+        <!--<p class="event listening">Connecting to Device</p>-->
+        <!--<p class="event received">Device is Ready</p>-->
+        <!--</div>-->
+
     </div>
 
-    <script src="./touch-move.js"></script>
 </body>
+
 </html>
