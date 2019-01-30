@@ -7,31 +7,26 @@ $(() => {
         juliB = 0
 
     $box.on('touchstart', e => {
-        if (e.targetTouches.length < 2) {
-            return false
-        }
         pointA.x = e.targetTouches[0].pageX
         pointA.y = e.targetTouches[0].pageY
-        pointB.x = e.targetTouches[1].pageX
-        pointB.y = e.targetTouches[1].pageY
-        juliA = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x)) + Math.pow(Math.abs(pointA.y - pointB.y))), .5)
+        if (e.targetTouches.length > 1) {
+            pointB.x = e.targetTouches[1].pageX
+            pointB.y = e.targetTouches[1].pageY
+            juliA = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x)) + Math.pow(Math.abs(pointA.y - pointB.y))), .5)
+        }
     })
 
     $box.on('touchmove', e => {
-        if (e.targetTouches.length < 2) {
-            return false
-        }
         pointA.x = e.targetTouches[0].pageX
         pointA.y = e.targetTouches[0].pageY
-        pointB.x = e.targetTouches[1].pageX
-        pointB.y = e.targetTouches[1].pageY
-        juliB = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x)) + Math.pow(Math.abs(pointA.y - pointB.y))), .5)
+        if (e.targetTouches.length < 2) {
+            pointB.x = e.targetTouches[1].pageX
+            pointB.y = e.targetTouches[1].pageY
+            juliB = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x)) + Math.pow(Math.abs(pointA.y - pointB.y))), .5)
+        }
     })
 
     $box.on('touchend', e => {
-        if (e.targetTouches.length < 2) {
-            return false
-        }
         if (juliB > juliA) {
             alert('放大')
         } else {
