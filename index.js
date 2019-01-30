@@ -32,16 +32,18 @@ $(() => {
         juliB = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x), 2) + Math.pow(Math.abs(pointA.y - pointB.y), 2)), .5)
 
         if (slock) {
-            if (juliB > juliA) {
-                bgSzie += 20
-                $box.css('background-size', bgSzie + '%')
-            } else {
-                bgSzie -= 20
-                if (bgSzie < 100) {
-                    bgSzie = 100
+            setTimeout(() => {
+                if (juliB > juliA) {
+                    bgSzie += 20
+                    $box.css('background-size', bgSzie + '%')
+                } else {
+                    bgSzie -= 20
+                    if (bgSzie < 100) {
+                        bgSzie = 100
+                    }
+                    $box.css('background-size', bgSzie + '%')
                 }
-                $box.css('background-size', bgSzie + '%')
-            }
+            }, 50)
         }
     })
 
