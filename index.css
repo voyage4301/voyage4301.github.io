@@ -16,8 +16,8 @@ html,body {
 }
 
 #app .box {
-    width: 175px;
-    height: 325px;
+    width: 350px;
+    height: 650px;
     position: absolute;
     top: 50%;
     left: 50%;
