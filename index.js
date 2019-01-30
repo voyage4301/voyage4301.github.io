@@ -4,7 +4,8 @@ $(() => {
     var pointA = { x: 0, y: 0 },
         pointB = { x: 0, y: 0 },
         juliA = 0,
-        juliB = 0
+        juliB = 0,
+        slock = false
     $box.on('touchstart', e => {
         console.log(e);
 
@@ -15,6 +16,9 @@ $(() => {
             pointB.y = e.touches[1].pageY
         }
         juliA = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x), 2) + Math.pow(Math.abs(pointA.y - pointB.y), 2)), .5)
+        if (e.touches.length > 1) {
+            slock = true
+        }
     })
 
     $box.on('touchmove', e => {
@@ -28,14 +32,13 @@ $(() => {
     })
 
     $box.on('touchend', e => {
-        alert('a:' + juliA + 'b:' + juliB);
-        alert(e.touches.length)
-        if (juliB > juliA) {
-            alert('放大')
-        } else {
-            alert('缩小')
+        if(slock) {
+            if (juliB > juliA) {
+                alert('放大')
+            } else {
+                alert('缩小')
+            }
         }
-
     })
 })
 
