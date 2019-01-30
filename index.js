@@ -33,11 +33,9 @@ $(() => {
 
         if (slock) {
             if (juliB > juliA) {
-                alert('放大')
                 bgSzie += 20
                 $box.css('background-size', bgSzie + '%')
             } else {
-                alert('缩小')
                 bgSzie -= 20
                 if (bgSzie < 100) {
                     bgSzie = 100
