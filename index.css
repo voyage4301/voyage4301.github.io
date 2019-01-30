@@ -19,11 +19,12 @@ html,body {
     width: 350px;
     height: 650px;
     position: absolute;
-    
+
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: url(./1.jpeg) no-repeat center;
     background-size: 100%;
     overflow: hidden;
+    transition: all .01s;
 }
