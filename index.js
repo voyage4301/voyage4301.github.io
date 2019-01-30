@@ -30,12 +30,10 @@ $(() => {
     $box.on('touchend', e => {
         alert('a:' + juliA + 'b:' + juliB);
         alert(e.touches.length)
-        if (e.touches.length > 1) {
-            if (juliB > juliA) {
-                alert('放大')
-            } else {
-                alert('缩小')
-            }
+        if (juliB > juliA) {
+            alert('放大')
+        } else {
+            alert('缩小')
         }
 
     })
