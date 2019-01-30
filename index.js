@@ -5,8 +5,8 @@ $(() => {
         pointB = { x: 0, y: 0 },
         juliA = 0,
         juliB = 0
-
     $box.on('touchstart', e => {
+        alert('开始摸')
         pointA.x = e.targetTouches[0].pageX
         pointA.y = e.targetTouches[0].pageY
         if (e.targetTouches.length > 1) {
@@ -33,6 +33,7 @@ $(() => {
             alert('缩小')
         }
     })
+    alert('完毕')
 })
 
 
