@@ -15,7 +15,7 @@ $(() => {
             pointB.y = e.touches[1].pageY
         }
         juliA = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x), 2) + Math.pow(Math.abs(pointA.y - pointB.y), 2)), .5)
-    }, false)
+    })
 
     $box.on('touchmove', e => {
         pointA.x = e.touches[0].pageX
@@ -25,10 +25,10 @@ $(() => {
             pointB.y = e.touches[1].pageY
         }
         juliB = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x), 2) + Math.pow(Math.abs(pointA.y - pointB.y), 2)), .5)
-    }, false)
+    })
 
     $box.on('touchend', e => {
-        alert('a:' + juliA, 'b:' + juliB);
+        alert('a:' + juliA + 'b:' + juliB);
         if (e.touches.length > 1) {
             if (juliB > juliA) {
                 alert('放大')
@@ -37,7 +37,7 @@ $(() => {
             }
         }
 
-    }, false)
+    })
 })
 
 
