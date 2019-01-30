@@ -7,7 +7,7 @@ $(() => {
         juliB = 0
     $box.on('touchstart', e => {
         console.log(e);
-        
+
         pointA.x = e.touches[0].pageX
         pointA.y = e.touches[0].pageY
         if (e.touches.length > 1) {
@@ -15,7 +15,7 @@ $(() => {
             pointB.y = e.touches[1].pageY
         }
         juliA = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x), 2) + Math.pow(Math.abs(pointA.y - pointB.y), 2)), .5)
-    })
+    }, false)
 
     $box.on('touchmove', e => {
         pointA.x = e.touches[0].pageX
@@ -25,7 +25,7 @@ $(() => {
             pointB.y = e.touches[1].pageY
         }
         juliB = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x), 2) + Math.pow(Math.abs(pointA.y - pointB.y), 2)), .5)
-    })
+    }, false)
 
     $box.on('touchend', e => {
         alert(juliA, juliB);
@@ -37,7 +37,7 @@ $(() => {
             }
         }
 
-    })
+    }, false)
 })
 
 
