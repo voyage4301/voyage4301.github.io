@@ -9,10 +9,10 @@ $(() => {
         pointA.x = e.targetTouches[0].pageX
         pointA.y = e.targetTouches[0].pageY
         if (e.targetTouches.length > 1) {
-            alert(1111)            
             pointB.x = e.targetTouches[1].pageX
             pointB.y = e.targetTouches[1].pageY
             juliA = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x)) + Math.pow(Math.abs(pointA.y - pointB.y))), .5)
+            alert(juliA)
         }
     })
 
@@ -20,10 +20,10 @@ $(() => {
         pointA.x = e.targetTouches[0].pageX
         pointA.y = e.targetTouches[0].pageY
         if (e.targetTouches.length > 1) {
-            alert(2222)            
             pointB.x = e.targetTouches[1].pageX
             pointB.y = e.targetTouches[1].pageY
             juliB = Math.pow((Math.pow(Math.abs(pointA.x - pointB.x)) + Math.pow(Math.abs(pointA.y - pointB.y))), .5)
+            alert(juliB)
         }
     })
 
