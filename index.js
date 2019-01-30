@@ -26,8 +26,7 @@ $(() => {
     })
 
     $box.on('touchend', e => {
-        console.log(juliA, juliB);
-
+        alert(juliA, juliB);
         if (e.targetTouches.length > 1) {
             if (juliB > juliA) {
                 alert('放大')
