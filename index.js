@@ -34,16 +34,16 @@ $(() => {
         if (slock) {
             setTimeout(() => {
                 if (juliB > juliA) {
-                    bgSzie += 20
+                    bgSzie += 10
                     $box.css('background-size', bgSzie + '%')
                 } else {
-                    bgSzie -= 20
+                    bgSzie -= 10
                     if (bgSzie < 100) {
                         bgSzie = 100
                     }
                     $box.css('background-size', bgSzie + '%')
                 }
-            }, 50)
+            }, 100)
         }
     })
 
