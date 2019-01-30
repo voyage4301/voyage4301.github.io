@@ -7,7 +7,7 @@ $(() => {
         juliB = 0
 
     $box.on('touchstart', e => {
-        if (e.targetTouches.length < 1) {
+        if (e.targetTouches.length < 2) {
             return false
         }
         pointA.x = e.targetTouches[0].pageX
@@ -18,7 +18,7 @@ $(() => {
     })
 
     $box.on('touchmove', e => {
-        if (e.targetTouches.length < 1) {
+        if (e.targetTouches.length < 2) {
             return false
         }
         pointA.x = e.targetTouches[0].pageX
@@ -29,7 +29,7 @@ $(() => {
     })
 
     $box.on('touchend', e => {
-        if (e.targetTouches.length < 1) {
+        if (e.targetTouches.length < 2) {
             return false
         }
         if (juliB > juliA) {
