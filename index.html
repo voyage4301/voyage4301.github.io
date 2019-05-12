@@ -10,17 +10,21 @@
             margin: 0;
             padding: 0;
         }
-        #cas {
+        html,body {
+            width: 100%;
+            height: 100%;
         }
+     
     </style>
 </head>
 <body>
-    <canvas id="cas" width="800" height="900"></canvas>
+    <canvas id="cas"></canvas>
 
     <script>
         window.onload = () => {
             //十六进制颜色值的正则表达式  
             var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;  
+
             String.prototype.colorRgb = function(opacity){  
                 var sColor = this.toLowerCase();  
                 if(sColor && reg.test(sColor)){  
@@ -47,115 +51,135 @@
                     return sColor;    
                 }  
             };  
-            const cas = document.querySelector('#cas'),
+            function canvasFun() {
+                const cas = document.querySelector('#cas'),
                 ctx =cas.getContext('2d')
+                cas.width = window.innerWidth
+                cas.height = 400
             
-            let arr = [
-                {data1: 720, data2: 678, color: '#7596F5', title: '张三'},
-                {data1: 342, data2: 678, color: '#EE7668', title: '李四'},
-                {data1: 999, data2: 678, color: '#7CBEF8', title: '王五'},
-                {data1: 111, data2: 678, color: '#F3A263', title: '赵六哈'},
-                {data1: 111, data2: 678, color: '#FFC0CB', title: '赵六哈哈'},
-                {data1: 0, data2: 1, color: '#FFC0CB', title: '赵六哈哈哈'},
-            ]
 
+                let arr = [
+                    {data1: 720, data2: 678, color: '#7596F5', title: '张三'},
+                    {data1: 342, data2: 678, color: '#EE7668', title: '李四'},
+                    {data1: 999, data2: 678, color: '#7CBEF8', title: '王五'},
+                    {data1: 111, data2: 678, color: '#F3A263', title: '赵六哈'},
+                    {data1: 111, data2: 678, color: '#FFC0CB', title: '赵六哈哈'},
+                    {data1: 0, data2: 1, color: '#FFC0CB', title: '赵六哈哈哈'},
+                ]
+                let r = 10
+                let angle = .05
+                let x = 0
+                width =arr.length * 20 + 10
+                x = width
+                arr.forEach(v=>{
+                    ctx.lineCap = "round"
+                    
+                    let num1 = v.data1,
+                    num2 = v.data2,
+                    sAngle = (-.5+angle) * Math.PI
+                    eAngle = -((num1 / (num1+num2) + .25) * 2 - angle) *Math.PI
 
-            
-            let r = 50
-            let angle = .05
-            arr.forEach(v=>{
-                ctx.lineWidth = 10 
-                ctx.lineCap = "round"
-                
-                let num1 = v.data1,
-                num2 = v.data2,
-                sAngle = (-.5+angle) * Math.PI
-                eAngle = -((num1 / (num1+num2) + .25) * 2 - angle) *Math.PI
-
-                /* 横线 */
-                if(!v.data1) {
-                    ctx.strokeStyle = '#F7F7F7'
-                }else {
-                    ctx.strokeStyle = v.color.colorRgb(.5)
-                }
-                ctx.beginPath()
-                ctx.lineWidth = 1 
-                ctx.moveTo(200+ (10 /2), 200-r)
-                ctx.lineTo(250, 200-r)
-                ctx.stroke()
-                
-                /* 背景圆弧 */
-                ctx.beginPath()
-                ctx.lineWidth = 10 
-                ctx.strokeStyle = '#F7F7F7'
-                ctx.arc(200, 200, r, eAngle, (-2+angle) *Math.PI, true)
-                ctx.stroke()
-
-                /* 数据圆弧 */
-                ctx.beginPath()
-                // ctx.strokeStyle = v.color
-                var grd=ctx.createLinearGradient(250,150,250,350);
-                grd.addColorStop(0,v.color.colorRgb(1));
-                grd.addColorStop(1,v.color.colorRgb(.1));
-                ctx.strokeStyle=grd;
-
-                if(v.data1) {
-                    ctx.arc(200, 200, r, sAngle, eAngle, true)
-                    ctx.stroke()
-                }
-
-                /* 横线后的圆 */
-                if(!v.data1) ctx.strokeStyle = 'rgba(0,0,0,.1)'
-                ctx.lineWidth = 2 
-                ctx.beginPath()
-                ctx.arc(250 + 10, 200-r, 10/4, -.5*Math.PI, -2.5*Math.PI, true)
-                ctx.stroke()
-
-                /* 文本 */
-                ctx.beginPath()
-                ctx.font = `${12}px bold 黑体`;
-                if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
-                else ctx.fillStyle = '#000'
-                ctx.textAlign = "left"
-                ctx.textBaseline = "middle"
-                ctx.fillText(v.title, 250 + 10 + 10/4*2 + 10,  200-r);
-
-                /* 文本-数据2 */
-                ctx.beginPath()
-                ctx.font = `${12}px bold 黑体`;
-                if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
-                else ctx.fillStyle = '#000'
-                ctx.textAlign = "left"
-                ctx.textBaseline = "middle"
-                ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, 250 + 10 + 10/4*2 + 10 + v.title.length*12+ 10,  200-r);
-                
-                /* 文本后的间隔线 */
-                if(v.data1) {
-                    ctx.strokeStyle = 'rgba(0,0,0,.2)'
+                    /* 横线 */
+                    if(!v.data1) {
+                        ctx.strokeStyle = '#F7F7F7'
+                    }else {
+                        ctx.strokeStyle = v.color.colorRgb(.5)
+                    }
                     ctx.beginPath()
                     ctx.lineWidth = 1 
-                    ctx.moveTo(250 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10 , 200 - r + 10 /2 - 12)
-                    ctx.lineTo(250 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10, 200 - r + 10 /2) 
+                    ctx.moveTo(x+ (10 /2), 200-r)
+                    ctx.lineTo(x+40, 200-r)
                     ctx.stroke()
-                }
-                
 
-                /* 间隔线后的文本 */
-                if(v.data1) {
+                    /* 背景圆弧 */
+                    ctx.beginPath()
+                    ctx.lineWidth = 8
+                    ctx.strokeStyle = '#F7F7F7'
+                    ctx.arc(x, 200, r, eAngle, (-2+angle) *Math.PI, true)
+                    ctx.stroke()
+
+                    /* 数据圆弧 */
+                    ctx.beginPath()
+                    // ctx.strokeStyle = v.color
+                    var grd=ctx.createLinearGradient(x,150,x,350);
+                    grd.addColorStop(0,v.color.colorRgb(1));
+                    grd.addColorStop(1,v.color.colorRgb(.1));
+                    ctx.strokeStyle=grd;
+
+                    if(v.data1) {
+                        ctx.arc(x, 200, r, sAngle, eAngle, true)
+                        ctx.stroke()
+                    }
+
+                    /* 横线后的圆 */
+                    if(!v.data1) ctx.strokeStyle = 'rgba(0,0,0,.1)'
+                    ctx.lineWidth = 2 
+                    ctx.beginPath()
+                    ctx.arc(x+40, 200-r, 10/4, -.5*Math.PI, -2.5*Math.PI, true)
+                    ctx.stroke()
+
+                    /* 文本 */
                     ctx.beginPath()
                     ctx.font = `${12}px bold 黑体`;
-                    ctx.fillStyle = 'rgba(0,0,0,.5)'
+                    if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
+                    else ctx.fillStyle = '#000'
                     ctx.textAlign = "left"
                     ctx.textBaseline = "middle"
-                    ctx.fillText(`缺口  ${v.data2}万`, 250 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10 + 10,  200-r);
+                    // ctx.fillText(v.title, 190 + 5 + 10/4*2 + 10,  200-r);
+                    ctx.fillText(v.title, x+40+5,  200-r);
+
+                    /* 文本-数据2 */
+                    ctx.beginPath()
+                    ctx.font = `${12}px bold 黑体`;
+                    if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
+                    else ctx.fillStyle = '#000'
+                    ctx.textAlign = "left"
+                    ctx.textBaseline = "middle"
+                    // ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, 200 + 10 + 10/4*2 + 10 + v.title.length*12+ 10,  200-r);
+                    ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, x+40+5 + v.title.length*12+ 5,  200-r);
+
+                    /* 文本后的间隔线 */
+                    if(v.data1) {
+                        ctx.strokeStyle = 'rgba(0,0,0,.2)'
+                        ctx.beginPath()
+                        ctx.lineWidth = 1 
+                        // ctx.moveTo(200 + 10 + 10/4*2 + 10 + v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 10 , 200 - r + 10 /2 - 12)
+                        ctx.moveTo(x+40+5+ v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 5 , 200 - r + 10 /2 - 12)
+                        // ctx.lineTo(200 + 10 + 10/4*2 + 10 + v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 10, 200 - r + 10 /2) 
+                        ctx.lineTo(x+40+5+ v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 5, 200 - r + 10 /2) 
+
+                        ctx.stroke()
+                    }
+
+
+                    /* 间隔线后的文本 */
+                    if(v.data1) {
+                        ctx.beginPath()
+                        ctx.font = `${12}px bold 黑体`;
+                        ctx.fillStyle = 'rgba(0,0,0,.5)'
+                        ctx.textAlign = "left"
+                        ctx.textBaseline = "middle"
+                        // ctx.fillText(`缺口  ${v.data2}万`, 200 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10 + 10,  200-r);
+                        ctx.fillText(`缺口  ${v.data2}万`, x+40+5 + v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 5 + 5,  200-r);
+                    }
+                    r+=20
+                    angle+=.0005
+                })
+            }
+            function rem () {
+                let width = window.innerWidth
+                if (width < 320) {
+                    width = 320
                 }
-                r+=20
-                angle+=.0005
+                let htmlFontSize = window.innerWidth / 320 * 100
+                window.document.documentElement.style.fontSize = `${htmlFontSize}px`
+            }
+            rem()
+            canvasFun()
+            window.addEventListener('resize', function() {
+                rem()
+                canvasFun()
             })
-            
-
-            
-
         }
     </script>
 </body>
