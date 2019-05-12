@@ -1,1 +1,162 @@
-<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>test-vue-move</title><link href=/static/css/app.9f6f1d477b6764ae985a114275ed5c60.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.83b92e1fe5083d7f2518.js></script><script type=text/javascript src=/static/js/app.06ee2e380fd2a2b78745.js></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #cas {
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cas" width="800" height="900"></canvas>
+
+    <script>
+        window.onload = () => {
+            //十六进制颜色值的正则表达式  
+            var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;  
+            String.prototype.colorRgb = function(opacity){  
+                var sColor = this.toLowerCase();  
+                if(sColor && reg.test(sColor)){  
+                    if(sColor.length === 4){  
+                        var sColorNew = "#";  
+                        for(var i=1; i<4; i+=1){  
+                            sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));     
+                        }  
+                        sColor = sColorNew;  
+                    }  
+                    //处理六位的颜色值  
+                    var sColorChange = [];  
+                    for(var i=1; i<7; i+=2){  
+                        sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));    
+                    }  
+                    if(opacity) {
+                        return `rgba(${sColorChange.join(",")},${opacity})`; 
+
+                    }else {
+                        return "rgb(" + sColorChange.join(",") + ")"; 
+
+                    }
+                }else{  
+                    return sColor;    
+                }  
+            };  
+            const cas = document.querySelector('#cas'),
+                ctx =cas.getContext('2d')
+            
+            let arr = [
+                {data1: 720, data2: 678, color: '#7596F5', title: '张三'},
+                {data1: 342, data2: 678, color: '#EE7668', title: '李四'},
+                {data1: 999, data2: 678, color: '#7CBEF8', title: '王五'},
+                {data1: 111, data2: 678, color: '#F3A263', title: '赵六哈'},
+                {data1: 111, data2: 678, color: '#FFC0CB', title: '赵六哈哈'},
+                {data1: 0, data2: 1, color: '#FFC0CB', title: '赵六哈哈哈'},
+            ]
+
+
+            
+            let r = 50
+            let angle = .05
+            arr.forEach(v=>{
+                ctx.lineWidth = 10 
+                ctx.lineCap = "round"
+                
+                let num1 = v.data1,
+                num2 = v.data2,
+                sAngle = (-.5+angle) * Math.PI
+                eAngle = -((num1 / (num1+num2) + .25) * 2 - angle) *Math.PI
+
+                /* 横线 */
+                if(!v.data1) {
+                    ctx.strokeStyle = '#F7F7F7'
+                }else {
+                    ctx.strokeStyle = v.color.colorRgb(.5)
+                }
+                ctx.beginPath()
+                ctx.lineWidth = 1 
+                ctx.moveTo(200+ (10 /2), 200-r)
+                ctx.lineTo(250, 200-r)
+                ctx.stroke()
+                
+                /* 背景圆弧 */
+                ctx.beginPath()
+                ctx.lineWidth = 10 
+                ctx.strokeStyle = '#F7F7F7'
+                ctx.arc(200, 200, r, eAngle, (-2+angle) *Math.PI, true)
+                ctx.stroke()
+
+                /* 数据圆弧 */
+                ctx.beginPath()
+                // ctx.strokeStyle = v.color
+                var grd=ctx.createLinearGradient(250,150,250,350);
+                grd.addColorStop(0,v.color.colorRgb(1));
+                grd.addColorStop(1,v.color.colorRgb(.1));
+                ctx.strokeStyle=grd;
+
+                if(v.data1) {
+                    ctx.arc(200, 200, r, sAngle, eAngle, true)
+                    ctx.stroke()
+                }
+
+                /* 横线后的圆 */
+                if(!v.data1) ctx.strokeStyle = 'rgba(0,0,0,.1)'
+                ctx.lineWidth = 2 
+                ctx.beginPath()
+                ctx.arc(250 + 10, 200-r, 10/4, -.5*Math.PI, -2.5*Math.PI, true)
+                ctx.stroke()
+
+                /* 文本 */
+                ctx.beginPath()
+                ctx.font = `${12}px bold 黑体`;
+                if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
+                else ctx.fillStyle = '#000'
+                ctx.textAlign = "left"
+                ctx.textBaseline = "middle"
+                ctx.fillText(v.title, 250 + 10 + 10/4*2 + 10,  200-r);
+
+                /* 文本-数据2 */
+                ctx.beginPath()
+                ctx.font = `${12}px bold 黑体`;
+                if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
+                else ctx.fillStyle = '#000'
+                ctx.textAlign = "left"
+                ctx.textBaseline = "middle"
+                ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, 250 + 10 + 10/4*2 + 10 + v.title.length*12+ 10,  200-r);
+                
+                /* 文本后的间隔线 */
+                if(v.data1) {
+                    ctx.strokeStyle = 'rgba(0,0,0,.2)'
+                    ctx.beginPath()
+                    ctx.lineWidth = 1 
+                    ctx.moveTo(250 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10 , 200 - r + 10 /2 - 12)
+                    ctx.lineTo(250 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10, 200 - r + 10 /2) 
+                    ctx.stroke()
+                }
+                
+
+                /* 间隔线后的文本 */
+                if(v.data1) {
+                    ctx.beginPath()
+                    ctx.font = `${12}px bold 黑体`;
+                    ctx.fillStyle = 'rgba(0,0,0,.5)'
+                    ctx.textAlign = "left"
+                    ctx.textBaseline = "middle"
+                    ctx.fillText(`缺口  ${v.data2}万`, 250 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10 + 10,  200-r);
+                }
+                r+=20
+                angle+=.0005
+            })
+            
+
+            
+
+        }
+    </script>
+</body>
+</html>
