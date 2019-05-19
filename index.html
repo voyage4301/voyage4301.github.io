@@ -17,12 +17,8 @@
             width: 100%;
             height: 100%;
         }
-
-        /* #cas {
-            width: 150px;
-            height: 150px;
-        } */
-        span {
+        div {
+            text-align: center;
             font-size: .12rem;
         }
     </style>
@@ -30,7 +26,7 @@
 
 <body>
     <canvas id="cas"></canvas>
-
+    <div>--------华丽的分割线-----------</div>
     <script>
         window.onload = () => {
             //十六进制颜色值的正则表达式  
@@ -58,7 +54,7 @@
                     data1: 111,
                     data2: 678,
                     color: '#F3A263',
-                    title: '赵六哈'
+                    title: '赵六'
                 },
                 {
                     data1: 111,
@@ -107,86 +103,91 @@
                     else ctx.strokeStyle = v.color.colorRgb(.5)
                     ctx.beginPath()
                     ctx.lineWidth = .01 * doc_fontSize
-                    ctx.moveTo(x + 5, y - r) //横线的起点
-                    ctx.lineTo(x + 5 + line_width, y - r) //横线的终点
+                    ctx.moveTo(2 * x + 5, 2 * (y - r)) //横线的起点
+                    ctx.lineTo(2 * (x + line_width + 5), 2 * (y - r)) //横线的终点
                     ctx.stroke()
                 },
                 bgArc(sAngle, eAngle) { // 背景圆弧
                     ctx.beginPath()
                     ctx.lineWidth = arc_width
                     ctx.strokeStyle = bg_arc
-                    ctx.arc(x, y, r, sAngle, (-2 + d_angle) * Math.PI, true)
+                    ctx.arc(2 * x, 2 * y, 2 * r, sAngle, (-2 + d_angle) * Math.PI, true)
                     ctx.stroke()
                 },
                 dataArc(v, sAngle, eAngle) { // 数据圆弧
-                    let grd = ctx.createLinearGradient(x - r, 0, x + r, y + r);
+                    let grd = ctx.createLinearGradient(2 * (x - r), 0, 2 * (x + r), 2 * (y + r));
                     grd.addColorStop(0, v.color.colorRgb(1));
                     grd.addColorStop(1, v.color.colorRgb(.3));
 
                     if (v.data1) {
                         ctx.beginPath()
                         ctx.strokeStyle = grd
-                        ctx.arc(x, y, r, sAngle, eAngle, true)
+                        ctx.arc(2 * x, 2 * y, 2 * r, sAngle, eAngle, true)
                         ctx.stroke()
                     }
                 },
                 iconArc(v) { // 图标圆
                     if (!v.data1) ctx.strokeStyle = 'rgba(0,0,0,.1)'
-                    ctx.lineWidth = 2
+                    ctx.lineWidth = 2 * 2
                     ctx.beginPath()
-                    ctx.arc(x + line_width + 10, y - r, 2.5, -.5 * Math.PI, -2.5 * Math.PI, true)
+                    ctx.arc(2 * (x + line_width + 10), 2 * (y - r), 2 * 2.5, -.5 * Math.PI, -2.5 * Math.PI, true)
                     ctx.stroke()
                 },
                 className(v) { // 数据名
                     ctx.beginPath()
-                    ctx.font = `${.12 * doc_fontSize}px normal PingFangSC-Regular`;
+                    ctx.font = `${.18 * doc_fontSize}px normal PingFangSC-Regular`;
                     if (!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
                     else ctx.fillStyle = '#000'
                     ctx.textAlign = "left"
                     ctx.textBaseline = "middle"
-                    ctx.fillText(v.title, x + line_width + 15, y - r);
+                    ctx.fillText(v.title, 2 * (x + line_width + 17.5), 2 * (y - r));
                 },
                 dataOne(v) { // 数据值1
                     ctx.beginPath()
-                    ctx.font = `${.12 * doc_fontSize}px normal PingFangSC-Regular`;
+                    ctx.font = `${.18 * doc_fontSize}px normal PingFangSC-Regular`;
                     if (!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
                     else ctx.fillStyle = '#000'
                     ctx.textAlign = "left"
                     ctx.textBaseline = "middle"
-                    ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, x + line_width + v.title.length * .12 * doc_fontSize + 20, y - r);
+                    // ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, 2 * (x + line_width + v.title.length * .1 * doc_fontSize + 20), 2 * (y - r));
+                    ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, 2 * (x + line_width + 45), 2 * (y - r));
                 },
                 lineTwo(v) { // 间隔线
                     if (v.data1) {
                         ctx.strokeStyle = 'rgba(0,0,0,.2)'
                         ctx.beginPath()
                         ctx.lineWidth = 1
-                        ctx.moveTo(x + line_width + v.title.length * .12 * doc_fontSize + (v.data1 + '').length * .07 * doc_fontSize + 30 + 12, y - r + 10 / 2 - 12)
-                        ctx.lineTo(x + line_width + v.title.length * .12 * doc_fontSize + (v.data1 + '').length * .07 * doc_fontSize + 30 + 12, y - r + 10 / 2)
+                        // ctx.moveTo(2 * (x + line_width + v.title.length * .18 * doc_fontSize + (v.data1 + '').length * .1055 * doc_fontSize + 5), 2 * (y - r + 10 / 2 - 12))
+                        // ctx.lineTo(2 * (x + line_width + v.title.length * .18 * doc_fontSize + (v.data1 + '').length * .1055 * doc_fontSize + 5), 2 * (y - r + 10 / 2))
+                        ctx.moveTo(2 * (x + line_width + 85), 2 * (y - r + 10 / 2 - 12))
+                        ctx.lineTo(2 * (x + line_width + 85), 2 * (y - r + 10 / 2))
                         ctx.stroke()
                     }
                 },
                 dataTwo(v) { // 数据值2
                     if (v.data1) {
                         ctx.beginPath()
-                        ctx.font = `${.12 * doc_fontSize}px normal PingFangSC-Regular`;
+                        ctx.font = `${.18 * doc_fontSize}px normal PingFangSC-Regular`;
                         ctx.fillStyle = 'rgba(0,0,0,.5)'
                         ctx.textAlign = "left"
                         ctx.textBaseline = "middle"
-                        ctx.fillText(`缺口 ${v.data2}万`, x + line_width + v.title.length * .12 * doc_fontSize + (v.data1 + '').length * .07 * doc_fontSize + 35 + 12, y - r);
+                        // ctx.fillText(`缺口${v.data2}万`, 2 * (x + line_width + v.title.length * .18 * doc_fontSize + (v.data1 + '').length * .1055 * doc_fontSize + 10), 2 * (y - r));
+                        ctx.fillText(`缺口 ${v.data2}万`, 2 * (x + line_width + 95), 2 * (y - r));
                     }
                 }
             }
 
 
 
-            let r_r = 20, // 圆半径的递增量
+            let r = 20, // 圆的半径
+                r_r = 15, // 圆半径的递增量
                 angle = .25, // 起点弧度
                 d_angle = .05, //偏移弧度
                 x = 0, // 初始化圆的中心点坐标x轴
                 y = 0, // 初始化圆的中心点坐标y轴
                 line_width = 35, //横线的宽度 (单位px)
                 bg_arc = '#F7F7F7', // 背景圆弧的颜色
-                arc_width = 8 // 圆弧的宽度
+                arc_width = 6 * 2 // 圆弧的宽度
             const getEndAngle = (data1, data2, angle, deviation_angle) => -(data1 / (data1 + data2) * 1.5 + angle * 2 - deviation_angle) * Math.PI
             let doc_fontSize = 0
             const rem = () => {
@@ -199,12 +200,12 @@
                 window.document.documentElement.style.fontSize = `${htmlFontSize}px`
             }
             const canvasFun = arr => {
-                r = 8 //重置圆的半径
+                r = 20 //重置圆的半径
                 d_angle = .05 //重置偏移弧度
                 cas.width = document.body.offsetWidth * 2 //画布的宽度
                 cas.height = document.body.offsetWidth * 2 //画布的高度
 
-                document.querySelector('#cas').style.width = document.body.offsetWidth / 100  + 'rem'
+                document.querySelector('#cas').style.width = document.body.offsetWidth / 100 + 'rem'
                 document.querySelector('#cas').style.height = document.body.offsetWidth / 100 + 'rem'
                 ctx.lineCap = "round" //拐角补偿为圆弧
                 x = y = (arr.length - 1) * r_r + r + r_r / 2 //通过数据量计算出的圆的中心点坐标x轴
@@ -231,7 +232,7 @@
             canvasFun(arr)
             window.addEventListener('resize', () => {
                 rem()
-               
+
                 canvasFun(arr)
             })
         }
