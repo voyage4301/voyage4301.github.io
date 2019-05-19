@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,177 +11,225 @@
             margin: 0;
             padding: 0;
         }
-        html,body {
+
+        html,
+        body {
             width: 100%;
             height: 100%;
         }
-     
+
+        /* #cas {
+            width: 150px;
+            height: 150px;
+        } */
     </style>
 </head>
+
 <body>
     <canvas id="cas"></canvas>
 
     <script>
         window.onload = () => {
             //十六进制颜色值的正则表达式  
-            var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;  
-
-            String.prototype.colorRgb = function(opacity){  
-                var sColor = this.toLowerCase();  
-                if(sColor && reg.test(sColor)){  
-                    if(sColor.length === 4){  
-                        var sColorNew = "#";  
-                        for(var i=1; i<4; i+=1){  
-                            sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));     
-                        }  
-                        sColor = sColorNew;  
-                    }  
+            var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+            let arr = [
+                {
+                    data1: 720,
+                    data2: 678,
+                    color: '#7596F5',
+                    title: '张三'
+                },
+                {
+                    data1: 342,
+                    data2: 678,
+                    color: '#EE7668',
+                    title: '李四'
+                },
+                {
+                    data1: 1000,
+                    data2: 0,
+                    color: '#7CBEF8',
+                    title: '王五'
+                },
+                {
+                    data1: 111,
+                    data2: 678,
+                    color: '#F3A263',
+                    title: '赵六哈'
+                },
+                {
+                    data1: 111,
+                    data2: 678,
+                    color: '#FFC0CB',
+                    title: '龙七'
+                },
+                {
+                    data1: 0,
+                    data2: 0,
+                    color: '#FFC0CB',
+                    title: '凤八'
+                },
+            ]
+            String.prototype.colorRgb = function (opacity) {
+                var sColor = this.toLowerCase();
+                if (sColor && reg.test(sColor)) {
+                    if (sColor.length === 4) {
+                        var sColorNew = "#";
+                        for (var i = 1; i < 4; i += 1) {
+                            sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
+                        }
+                        sColor = sColorNew;
+                    }
                     //处理六位的颜色值  
-                    var sColorChange = [];  
-                    for(var i=1; i<7; i+=2){  
-                        sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));    
-                    }  
-                    if(opacity) {
-                        return `rgba(${sColorChange.join(",")},${opacity})`; 
+                    var sColorChange = [];
+                    for (var i = 1; i < 7; i += 2) {
+                        sColorChange.push(parseInt("0x" + sColor.slice(i, i + 2)));
+                    }
+                    if (opacity) {
+                        return `rgba(${sColorChange.join(",")},${opacity})`;
 
-                    }else {
-                        return "rgb(" + sColorChange.join(",") + ")"; 
+                    } else {
+                        return "rgb(" + sColorChange.join(",") + ")";
 
                     }
-                }else{  
-                    return sColor;    
-                }  
-            };  
-            function canvasFun() {
-                const cas = document.querySelector('#cas'),
-                ctx =cas.getContext('2d')
-                cas.width = window.innerWidth
-                cas.height = 400
-            
-
-                let arr = [
-                    {data1: 720, data2: 678, color: '#7596F5', title: '张三'},
-                    {data1: 342, data2: 678, color: '#EE7668', title: '李四'},
-                    {data1: 999, data2: 678, color: '#7CBEF8', title: '王五'},
-                    {data1: 111, data2: 678, color: '#F3A263', title: '赵六哈'},
-                    {data1: 111, data2: 678, color: '#FFC0CB', title: '赵六哈哈'},
-                    {data1: 0, data2: 1, color: '#FFC0CB', title: '赵六哈哈哈'},
-                ]
-                let r = 10
-                let angle = .05
-                let x = 0
-                width =arr.length * 20 + 10
-                x = width
-                arr.forEach(v=>{
-                    ctx.lineCap = "round"
-                    
-                    let num1 = v.data1,
-                    num2 = v.data2,
-                    sAngle = (-.5+angle) * Math.PI
-                    eAngle = -((num1 / (num1+num2) + .25) * 2 - angle) *Math.PI
-
-                    /* 横线 */
-                    if(!v.data1) {
-                        ctx.strokeStyle = '#F7F7F7'
-                    }else {
-                        ctx.strokeStyle = v.color.colorRgb(.5)
-                    }
+                } else {
+                    return sColor;
+                }
+            };
+            const cas = document.querySelector('#cas'),
+                ctx = cas.getContext('2d')
+            const paintFn = { // 画图的方法
+                line(v) { // 横线
+                    if (!v.data1) ctx.strokeStyle = bg_arc
+                    else ctx.strokeStyle = v.color.colorRgb(.5)
                     ctx.beginPath()
-                    ctx.lineWidth = 1 
-                    ctx.moveTo(x+ (10 /2), 200-r)
-                    ctx.lineTo(x+40, 200-r)
+                    ctx.lineWidth = .01 * doc_fontSize
+                    ctx.moveTo(x + 5, y - r) //横线的起点
+                    ctx.lineTo(x + 5 + line_width, y - r) //横线的终点
                     ctx.stroke()
-
-                    /* 背景圆弧 */
+                },
+                bgArc(sAngle, eAngle) { // 背景圆弧
                     ctx.beginPath()
-                    ctx.lineWidth = 8
-                    ctx.strokeStyle = '#F7F7F7'
-                    ctx.arc(x, 200, r, eAngle, (-2+angle) *Math.PI, true)
+                    ctx.lineWidth = arc_width
+                    ctx.strokeStyle = bg_arc
+                    ctx.arc(x, y, r, sAngle, (-2 + d_angle) * Math.PI, true)
                     ctx.stroke()
+                },
+                dataArc(v, sAngle, eAngle) { // 数据圆弧
+                    let grd = ctx.createLinearGradient(x - r, 0, x + r, y + r);
+                    grd.addColorStop(0, v.color.colorRgb(1));
+                    grd.addColorStop(1, v.color.colorRgb(.3));
 
-                    /* 数据圆弧 */
-                    ctx.beginPath()
-                    // ctx.strokeStyle = v.color
-                    var grd=ctx.createLinearGradient(x,150,x,350);
-                    grd.addColorStop(0,v.color.colorRgb(1));
-                    grd.addColorStop(1,v.color.colorRgb(.1));
-                    ctx.strokeStyle=grd;
-
-                    if(v.data1) {
-                        ctx.arc(x, 200, r, sAngle, eAngle, true)
+                    if (v.data1) {
+                        ctx.beginPath()
+                        ctx.strokeStyle = grd
+                        ctx.arc(x, y, r, sAngle, eAngle, true)
                         ctx.stroke()
                     }
-
-                    /* 横线后的圆 */
-                    if(!v.data1) ctx.strokeStyle = 'rgba(0,0,0,.1)'
-                    ctx.lineWidth = 2 
+                },
+                iconArc(v) { // 图标圆
+                    if (!v.data1) ctx.strokeStyle = 'rgba(0,0,0,.1)'
+                    ctx.lineWidth = 2
                     ctx.beginPath()
-                    ctx.arc(x+40, 200-r, 10/4, -.5*Math.PI, -2.5*Math.PI, true)
+                    ctx.arc(x + line_width + 10, y - r, 2.5, -.5 * Math.PI, -2.5 * Math.PI, true)
                     ctx.stroke()
-
-                    /* 文本 */
+                },
+                className(v) { // 数据名
                     ctx.beginPath()
-                    ctx.font = `${12}px bold 黑体`;
-                    if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
+                    ctx.font = `${.12 * doc_fontSize}px normal PingFangSC-Regular`;
+                    if (!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
                     else ctx.fillStyle = '#000'
                     ctx.textAlign = "left"
                     ctx.textBaseline = "middle"
-                    // ctx.fillText(v.title, 190 + 5 + 10/4*2 + 10,  200-r);
-                    ctx.fillText(v.title, x+40+5,  200-r);
-
-                    /* 文本-数据2 */
+                    ctx.fillText(v.title, x + line_width + 15, y - r);
+                },
+                dataOne(v) { // 数据值1
                     ctx.beginPath()
-                    ctx.font = `${12}px bold 黑体`;
-                    if(!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
+                    ctx.font = `${.12 * doc_fontSize}px normal PingFangSC-Regular`;
+                    if (!v.data1) ctx.fillStyle = 'rgba(0,0,0,.1)'
                     else ctx.fillStyle = '#000'
                     ctx.textAlign = "left"
                     ctx.textBaseline = "middle"
-                    // ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, 200 + 10 + 10/4*2 + 10 + v.title.length*12+ 10,  200-r);
-                    ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, x+40+5 + v.title.length*12+ 5,  200-r);
-
-                    /* 文本后的间隔线 */
-                    if(v.data1) {
+                    ctx.fillText(`${v.data1 == 0 ? '' : v.data1}万`, x + line_width + v.title.length * .12 * doc_fontSize + 20, y - r);
+                },
+                lineTwo(v) { // 间隔线
+                    if (v.data1) {
                         ctx.strokeStyle = 'rgba(0,0,0,.2)'
                         ctx.beginPath()
-                        ctx.lineWidth = 1 
-                        // ctx.moveTo(200 + 10 + 10/4*2 + 10 + v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 10 , 200 - r + 10 /2 - 12)
-                        ctx.moveTo(x+40+5+ v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 5 , 200 - r + 10 /2 - 12)
-                        // ctx.lineTo(200 + 10 + 10/4*2 + 10 + v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 10, 200 - r + 10 /2) 
-                        ctx.lineTo(x+40+5+ v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 5, 200 - r + 10 /2) 
-
+                        ctx.lineWidth = 1
+                        ctx.moveTo(x + line_width + v.title.length * .12 * doc_fontSize + (v.data1 + '').length * .12 * doc_fontSize + 25, y - r + 10 / 2 - 12)
+                        ctx.lineTo(x + line_width + v.title.length * .12 * doc_fontSize + (v.data1 + '').length * .12 * doc_fontSize + 25, y - r + 10 / 2)
                         ctx.stroke()
                     }
-
-
-                    /* 间隔线后的文本 */
-                    if(v.data1) {
+                },
+                dataTwo(v) { // 数据值2
+                    if (v.data1) {
                         ctx.beginPath()
-                        ctx.font = `${12}px bold 黑体`;
+                        ctx.font = `${.12 * doc_fontSize}px normal PingFangSC-Regular`;
                         ctx.fillStyle = 'rgba(0,0,0,.5)'
                         ctx.textAlign = "left"
                         ctx.textBaseline = "middle"
-                        // ctx.fillText(`缺口  ${v.data2}万`, 200 + 10 + 10/4*2 + 10 + v.title.length * 12 + 10+ (v.data1 + '').length * 12 + 10 + 10,  200-r);
-                        ctx.fillText(`缺口  ${v.data2}万`, x+40+5 + v.title.length * 12 + 5+ (v.data1 + '').length * 12 + 5 + 5,  200-r);
+                        ctx.fillText(`缺口 ${v.data2}万`, x + line_width + v.title.length * .12 * doc_fontSize + (v.data1 + '').length * .12 * doc_fontSize + 30, y - r);
                     }
-                    r+=20
-                    angle+=.0005
-                })
+                }
             }
-            function rem () {
+
+
+
+            let r_r = 20, // 圆半径的递增量
+                angle = .25, // 起点弧度
+                d_angle = .05, //偏移弧度
+                x = 0, // 初始化圆的中心点坐标x轴
+                y = 0, // 初始化圆的中心点坐标y轴
+                line_width = 35, //横线的宽度 (单位px)
+                bg_arc = '#F7F7F7', // 背景圆弧的颜色
+                arc_width = 8 // 圆弧的宽度
+            const getEndAngle = (data1, data2, angle, deviation_angle) => -(data1 / (data1 + data2) * 1.5 + angle * 2 - deviation_angle) * Math.PI
+            let doc_fontSize = 0
+            const rem = () => {
                 let width = window.innerWidth
                 if (width < 320) {
                     width = 320
                 }
                 let htmlFontSize = window.innerWidth / 320 * 100
+                doc_fontSize = htmlFontSize
                 window.document.documentElement.style.fontSize = `${htmlFontSize}px`
             }
+            const canvasFun = arr => {
+                r = 8 //重置圆的半径
+                d_angle = .05 //重置偏移弧度
+                cas.width = document.body.offsetWidth //画布的宽度
+                cas.height = document.body.offsetWidth //画布的高度
+                ctx.lineCap = "round" //拐角补偿为圆弧
+                x = y = (arr.length - 1) * r_r + r + r_r / 2 //通过数据量计算出的圆的中心点坐标x轴
+                console.log(x, y, r);
+
+                arr.forEach(v => {
+                    let sAngle = (-.5 + d_angle) * Math.PI,
+                        eAngle = getEndAngle(v.data1, v.data2, angle, d_angle)
+                    paintFn.line(v) /* 横线 */
+                    paintFn.bgArc(sAngle) /* 背景圆弧 */
+                    paintFn.dataArc(v, sAngle, eAngle)/* 数据圆弧 */
+                    paintFn.iconArc(v) /* 横线后的圆 */
+                    paintFn.className(v) /* 名称 */
+                    paintFn.dataOne(v) /* 数据1 */
+                    paintFn.lineTwo(v) /* 间隔线 */
+                    paintFn.dataTwo(v) /* 数据2 */
+                    r += r_r
+                    d_angle += .0005
+                })
+            }
+
+
             rem()
-            canvasFun()
-            window.addEventListener('resize', function() {
+            canvasFun(arr)
+            window.addEventListener('resize', () => {
                 rem()
-                canvasFun()
+               
+                canvasFun(arr)
             })
         }
     </script>
 </body>
+
 </html>
